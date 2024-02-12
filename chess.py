@@ -8,6 +8,7 @@ import tkinter as tk
 #queen = "Queen"
 #king = "King"
 
+
 white = "White"
 black = "Black"
 
@@ -19,6 +20,8 @@ window.grid()
 window.title("Chess Python")
 window['padx'] = 10
 window['pady'] = 10
+
+empty = tk.PhotoImage(width = 1, height = 1)
 
 class chessPiece:
     def __init___(self, pieceType, team, i, j):
@@ -61,5 +64,25 @@ class king(chessPiece):
         chessPiece.__init__(self, "King", team, i, j)
     
 
+def left(i, j):
+    print("left,", i, j)
+    return
 
+def right(i, j):
+    print("right,", i, j)
+    return
+
+def generateGame():
+    grid = [[0]*8 for _ in range(8)]
+    k = 0
+    for i in range(0, 8):
+        for j in range(0, 8):
+            grid[i][j] = tk.Button(window, image = empty, width = 32, height = 32, command = None)
+            grid[i][j].grid(column = j, row = i)
+            grid[i][j].bind('<ButtonRelease-1>', lambda k=k, i=i, j=j: left(i, j))
+            grid[i][j].bind('<Button-3>', lambda k=k, i=i, j=j: right(i, j))
+    return
+
+generateGame()
+window.mainloop()
     
