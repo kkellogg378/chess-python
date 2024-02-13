@@ -34,7 +34,7 @@ class chessPiece:
         return f"{team} {self.pieceType}"
     
 
-class pawn(chessPiece):
+class pawn(chessPiece): # Jace helped here
     def __init__(self, team, i, j):
         chessPiece.__init__(self, "Pawn", team, i, j)
     
