@@ -33,6 +33,10 @@ whitePawn_green = tk.PhotoImage(data = b64decode("iVBORw0KGgoAAAANSUhEUgAAACAAAA
 blackPawn       = tk.PhotoImage(data = b64decode("iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAApZJREFUWEedV21i7CAI1KN0k7T3P06bbHsU35MPBQSy7f7YJEoAZxg0tdZSWqullFZK4WvRPzPsWgWvSkcYa3VtouWPlZIEP25iNNgv3aSJpSl7fCAzlSehQQ7kU50OOX6/mkVhYmIiWjlgfo+cbzFGvenB6Ir5NLcIeGmmbOSpR7M2cab0hvhsJfSqjRjmpyd0DcBcz6n1i0NuqJM/Y8W16kdL1HhTGTfK0pWwGC/OCRnQFFX38djbFFEr1/flKOpe4aiCUbUWCH+d+3Y07igYFUh7LQnj0qEgr6Z92xGGIf5azudned8+YPD8efZsHEqdVfa+EoNkeapl37bWW+lU8CTh6zrLsb9DYE3HjVzl9GqqR4B3ThnU0sONjMZaegJrmS39ksjj11QsJ+tayv5G8Jt3MJUJ+6kKkmRNbRc3o0AFEVhyHGqgL9pQyn6vZ6wGhTbtwlQGHjwxd8fjgD3OvpVKkeSGepkQOkWYFI1Y9f7oSEzb6+ei6pcQ+13V1l3eX4U13/bgkLnZIhQC7jpWibMfKWt3D7ByxU44N6LB/SuFJJwNCpYVkaPhzzgGCoSQru8z2Vn1yysFSlY2MkLNRys2ZRpeqf5sRyAEplZnQWAi/K+rt5SJALqX/CdlvOTiqGDN16MhS2A0CaXTmVZMgYkdrYQ3JJin03y/P5cmlGGBvL52JBOJ9SY0tkPlH8GEYgy+LyTRWL+ziSe9YEaxsMOMPMzSvW5KQQmKWncLw7ZZFRwCzc3H+xC4nh0J/5fKsDas927Ug9oPtpBVnhiSnZZDIc7RH7O0XqPukwk6+q7k8SDz+y+jaMm/ETt3bN6C6zhSQo+b57c/OLWgLC5Sn1IFypM4xZjjpeyPLiMpfSab//j/A5G8RzqoJETPAAAADmVYSWZNTQAqAAAACAAAAAAAAADSU5MAAAAASUVORK5CYII="))
 blackPawn_green = tk.PhotoImage(data = b64decode("iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAA5hJREFUWEeVV1uy3TAIw2tJ0v2vp0m2UncAAcLO7UzPV+JjYx6SIEOmTJEhQx+m6KPoiox40PchY+ii/+X/64PvySPxpoZo0R51aeC8H8ZudSANYr1dwhd+/0+uivo5wzmLKJyNx9rtTvn1Fof7RZFSQuKvHgWlDI+RkzFhGM5Yhld79v4HOdSX9J7dRhTqXtQI5Uh/I6NI0JhDJvZE+jPrUW6kxhwDAnyJDlchHQfm4fJjp7kUdnZOhxJVcbXgrgZoNvOJFYAuNhTCIrWRX78vVz8sMmRzZ8cxYLAzwkAD41SZ8K5fS3UJ6hT4M6CGgaj8nuhWDJQq0O6nvmMG7wao+sE2OteNcJKVGRywmrvOA8VVEyLPe2e6myU6mBghR9yB/9SB6zxlOtmTtoq253EnOhg32LZzmQFHM6jWatXNnedZkeoZGXK/v+U6f4ly/37fcipoGSwAzTtzSAc2yIJ6LlFT9HJWWd5/v7dcxy/b9zQnmk5+OJfl5ejrOZMxRa7rdMU0lWvqYSAMrXreh2L3MrX6UyspEFq0HwxO6ollwNVwsR+ig/ie58lmZc4mond0GA2bvkO9/JpQ9ohB5DqOrukQSItxTHmewsBKzl2WKeBNwRpVokW5S+dx9ZaFwDz1zn1bIv5XkEECd5iEaAELUu2GdmqpE3WTyPu+pBal3Fn9pRVm17ROwI1mGxzCRDl4HmfjejhptQdmuK33Ltv7S2WAL27CtGdG06lOpBZJiRBrUxuVwBqSLpdw9MI+yaTwure9VUETjhKkUMHmKrf1zHAf/XS/Z8BuwfGcB9nXnT6KgZJRcfSTSjnoiAeYK7t+YCRbR6VGlx+aSZNkEbmVAZuhxfFAcw1h/5wcvrsbVguIHqX3AIy/UbcoHjtmfE8O/OTALiHedJ15x6WK2DuHmkwn9E8GcurCIveaiQBhzHxBGS9DnwPVrRNKmLhR5TStcCl77pvmf4IwKJNjOObPpOEGM44QHSnFpwe/TESjDSdJy5Rs4D0H1Rp2mt5mF7BUTuN9ctI6YsxJymW3Vo0VurDKeb4jIgMjfT/kpxkivExsqv22ttpIzwbj8602VHvuuuLs/0PTVUttzPUBv14TbbPWy/JboU9TCWM7BsWDfab5DwM8DSRI2zYpE0C/ZuLIiTdcp2eN9OhuEYIny9HMVK7PqQ11Dgc4kc7x6MzD6T+wABpWDJ0N61u9e1TLl++WrWXI/YjjL0RPOgmoSEbRAAAADmVYSWZNTQAqAAAACAAAAAAAAADSU5MAAAAASUVORK5CYII="))
 
+whiteRook       = tk.PhotoImage(data = b64decode("iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAxlJREFUWEe9V2t6nDAMlI7RLPRCLblr2fRCAdJjuJ9etuQHsP3R/ZGwxpZHo9HYi/BfPwgAKexII69/2jhtjNM55aUDIIN3YvcR31/pZyqAO4vrZQkILY9GVht8MXr7rZNQpOgi/usldCv6GmgIqQf0ex6+w2A/zwzgH0NUuXS4ssD8v+iMFtLsky4okI7nlB7Ljsc6pYQI87Lh9pzStBxIYY7nnB7LhvtzSpgQHu8b8tj7htJ1VXru6602pMDTsvMGFGxaZAPOICXunUk3pQ0NAM3TpIc6EQCupPRcq/pY5wQoG9GGgLKAH7kVhPq3Hxt8/Z4loAK5UuiAgegJDAAAvi2f8Oc5K6sChkoiiBEQE7z9/ISvj++8L5WtACColIQfqTVQ1cZPFsptxOI6GSUxMWKH5s3Lrrx4DnxiUZCnXkAv93XWZEu2pGqqMe8kfxRiAtJMHdTI8pIcTvLKtQXEAgf1idOX3F4CiDfnRTXhAjELU530Sif5PbVj4tWiM8tXaNBzLgF3RAwaNRV1EWa2QrHX5iPHr5kxGO2WpDSGeMBou8YPzo2oT8y+iheI4mov69fet3qOWrW+iqdyrA4GAmBqpxp7oyH+2P3CjmMX1Er2Mi2L4nKEY32wHcuH/UmMST2B3C9rhPRZ9X19WgyMqAWVO4HOA7GdDEI0GN2v4XJA7g0A0Z1YA74TVAZs1CpCY+ROexUAJaGuZiwYa0DdF9n1VIxaCjopvV+OLjOW1jkD2efLgcVewMbnSsAFEGLIhGIu9s4ZBcdVDXmarnsAQc58y1s7nuOJKuheIG0aFWg+kjtXqbmhgVhJBkD5qv8zEw55acOOAhzv/CiOUn06NNAQ1d4uN77I5RwSUMIunYYHpoYFPZCjrq+1KhcS6zq5A3BsPQFpZ5GLsi/XlXwiZoMPdSh2lRXmk6fnjRUvqHn/cL9yR5k6Q6mGKMLWycVE9ZJ//nRE2B4WI1lWPWue2us5329WQ+ePN0RYgVAaw/UqbGIeGe9PLbbCyLUIXpiR4fbIGwi8d0wPe8jdQetf2nFNR3C9PP4CqLyeNAhJ9REAAAAOZVhJZk1NACoAAAAIAAAAAAAAANJTkwAAAABJRU5ErkJggg=="))
+whiteRook_green = tk.PhotoImage(data = b64decode("iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABJlJREFUWEdtV1u22jAMlNeRpBsCVgt3QW1Cl3Hdo3lI5p7yAyS2rMdoNB7xPeaIGREjYsyYk994FCPGiIg5Y+K33+ezfJ9PcxkW5bJcxd9pJmgZiyff4GM72Po95hwylEvSSm5MJ/C/7HOjjqDRtCuzU2/gvILxgY7PLixnDGQA58hL/ba/PrKP5jo4qIPga+VjCaZfKBMMhssZLCwhUbanF2kb0VeKc71C0X6XIa0yYQiDe2CSJeQ2HysP8DxXfLPgY7hetbYtpZ9yxkeo0qoz069EMBdpDwc4Oyq/8OLyjfgmkmBAEcK4wmB+eLrw2FnBeuEAS+SeDrddJqTRY5xlVsaQA46Qp2RlaFCe6HSXnQ5VxzgPzlI1kpAE1LsD3B0zMjh0gf1T1eStizniem2x3a94P3c83B5nXM8j9scFf8/nHsfjwnf+3+9XXF97bPezS6BuMkb8PcYcC7ZUSyxm0vJz4YAzzhcd2G88YP0ctyvOrx1Y2x5XvF87HKHxRn9GTZ5hwdgFyoELXYQhTJ/PTa+aJxrxxk4e/Cf+Pn8JbcxEV1GcUl4zJQAhEasyC2nml1x/Pg/AKFP/xm8iciRDGtXK1nb/TSdGxHa7FHqCrQgRtW/mSAdMn/omBRPRYph4v47CBuqHtmUlncx0SC3C+uugArT5odoMJSBx85nq5elQjs44X0d1AtpnMW7C0vhAqPvtjSDQS5/pVa7sNrrAmVLMyr8jMpEl8CpIDS8fYIrNUPbbqXlinz3cFtiKeyoDZC9ybCFX7MbnE61HSHsaaoYszqSHx/298Lh4ZQFfb0f5XGyh0tyTNFphiUhGcgLbb60308J6JV8Qx6ZjMSQQv4z2Gtk/HKgAlXdsgx5gna7npom2jGEdnn7sIB/ztoi0tIOUh1NQVKxEEDNGtwAtyNDGjOvr0Hhb8G/ujwHCqnGNTFlbODSVT21cVNzTxvNaPbMUHbSbJUA6lyas7iP6SxGpLT4mKMTPGmR2gR+ibiWKBJvKF/7nPKDdVkzenxkC/a5b0OJdwt5miq5Z8MPgf1KXhi4Tkk4prSifckC5BGpwy8sa505q+kmdmUkRrTaCiwRFOqTd92vDGAaclrlPUuSgKtFlPJUg/cwEt6QeaMZtMjZdajbUZHypC8ivTcOi5eyCJqseg1ouqdazGQ4Uo4ti18WFQdUxS9BasKQTaXdSK1hdmWY8Twhea0t2kWR5Y6pk+dI17Hi6ydHcAxsFVKqtBRai5H3ACtr+WiNw6H1K2dauah4NpjfmgN92g0CWLYLDyDmyG0BiFiOcByVe1XlURCIZ68GalqJckM8qK1XkPsCj2+xIN0BKcoLcIGdLl0mU5gtfzywecy0lmOdKq8oeuy5dX1aq9apKM1KukWE1Q6w/CsRIkyWLLy3LpUI6X/cXkZWh+8n3rgfbeuEr3xvdVbjMZAZARD0JmTGQI1OmdPuWpdlUdGzaMyFZbEqz1SwoGbYIUmIn21DDi5sXmnX+xXqNfWWrFJPUjfQEpudP59cS+E4h2aJbHPuuWKn8+Hklt2TvafhB/uuo9a3KylHCxsSX3/8AB/dQF1nF3LIAAAAOZVhJZk1NACoAAAAIAAAAAAAAANJTkwAAAABJRU5ErkJggg=="))
+blackRook       = tk.PhotoImage(data = b64decode("iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAArdJREFUWEelV1mS3DAIhaO0JSf3P07KS45CCm2AhCX3pD+mpm0E6C1IjfAfHwQAgvz3zcdE8heAtHr8THIiAlCqp4Lqv/268t002sXYBtrLpw7e7tapMoAkbb1Bz2x4ueBN/ZLEp2BZ4TngK4xw0ICzXEift2Xo49Ae806ySh/fwdvpT7RcCi4g6GUmFDwuRNi3QMd94r5FYtud94Fxi3T+PREJIIRI53Vh3AIhIBz1/X0OFPeGWWqAAwIXu89UFBDhvA6MIQrGJE0xItxY/Ox03Qf3N4CUB0D287IBjk2FgfdGDrPy9DgP2PdfhX4CbroJ5wFhzgpA/tv6lKHnRH+uA36HHUh135byMyBITYQ9DSqmamWoZUBNELedRNmayaL4molbLTS9mbJdA2xMVUfRxzRkPldOz1SxaN9MixbkM2xTCApP0Tmdhn7CcNuOqNSZHxrZLEYHBERAoiwlbuCqu1+hVSdhH5dE5k2z6gjrrYwHU09wtOKd/VQNXc7w5ParFyJC+AQ1Y/uxwvBb7nPEQ3W5D1hOW7gpnu8BlYbUeSE4TYcSy0Mo7T1Bsr6rvLahsWNxyrC7JEBn/LZLzCigMj68brX8xA1NiAZW0UxCwD2XLBxlAsooHnRY0eto5gbEWn1SGPzv0Sm2K2eBSdMKatwkQhCocFq3eBTMxvEPNMAnYh6YrXTLkk/KWcH+XQmWHeoL0CBiBIifegyXtx3GAwKeEzpXThoeV7ejGSlfz7VWUU9BSTtz4xyuanYi8X8RfD2zrH5ENxmJrrQDmtOAPhHzinQVe9qGWMIiqdGYQDBFIJ1+5njW5JnpIps1J3qOt7oYrVts2SU0tzVn/Ov9GmjHAh56FThloKefmE7Cb3z2EFuzZpl1Pzh1SeuyN9eWd+rXB3pbIekfVDPzk6Gkp1MPXwvJP0owYzUhekWKAAAADmVYSWZNTQAqAAAACAAAAAAAAADSU5MAAAAASUVORK5CYII="))
+blackRook_green = tk.PhotoImage(data = b64decode("iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAA8JJREFUWEd9VwlyxCAMg7eE9P/v2cBXmo5tyQfJtu3MboGALMsy6e3W39a6/umP/Cs/5X+swZR/yBpO5SV5zBdvC3rvrdvxvbXbPnw3IOkyRVQA6ZvLI5x30L3deS+NjCFFYNwTABCvYrjbzdAfcVZmnC2PjBFknnZeLUiJXmLv/ZbYnYrtSBkXcmRhbCoB2oBFpqtuy6TnDeP6rIRFFvxZW9r7r8CIvD9zbCdHTnmojNWc9QzCaURqgc0Os4BsTwDfD2Ywu7CqSkM7xhQZ+JYKaEHAaVwCBymvMknlUPSAVO1lkqompiI2YV8j78EZU4fkEFnOYehiHKPNOdt5Do1yrtl0bE3lcZyYP4bSqmvHaJfMO/VWDJaZEKbDrFrl4UYlDxvjVJ7l4BOHcbtrrTaOQ7eWg2XeAIROVCOafNOFitB9wO3naUgCwBg0GjXXWVSQ07U+7TxOj0+AOuk5bV6GqexNP8CTnPG+exvj0NnP+rSf46xm4OKxSK91tXP86HdJRbGevC9n+i3EoNCSill83F9ZyAm16rf6LozYsjXn09DAICtOHg2pcrIoPPI1NPKoFfpQuAK3tRGhn6UZNY9STTpEGYZ/ZzEWf7ybKltVvNWsVyrMZc61tTRj6dk3hAFxQqFTxPVSz1SxHHJoGky+dL0AGcgseng97Oab19oq5lAjSBxk1FhDFlLqcZihn/PyEitEPQRoEJMPyFeIIvtvTm23inBD0RMsckiyXaJ8NxsI1Ns4V92+R7Li2liUshcgrIbduLh4rctZNONxzaOIQLjujdSHkqtY6iGmK7HdKhYyYMNqz0ijzTCKTbnOHNoxrSD3c2LPBwoDUYLPksgC9Of3TRUTw85O4qjs0R2z8BmlGN7JtQLsuuB+oO+tMecrYLkPKCiElyynQBmDKajU0yXVAYGI1y7LQoaC71plv13sPi6lyW857EOtlS4IL+Ylzzol/f9fBsLVrQq8T292z1T5zRhl+JYeJHxpByxN49Xeonx5W3SjoG7TjSa1DG9Kj22NVgewl7A3opo6vZTS3627vXh97+2Qlpy7ntdoesA3aK34gdCcAaXv6AUQSagnXbmlB9RO6DeHBMIaTbTm3BFfK8oZlBTwTabc1exgvDhESWdje9Rpbl1xATVzqo4Y7xT5Wu46qLf1cHvog6Ll25zbLQ5Jbz4Fb7mOw7z5ZsQk5bZsWpa7gtSrhbvf8dwVM4hNgG9mFJWfrNgH396Uvlwonm65v57BYl72lODeU/wvtRsL3npJ9t58tvdOBoJlf8TrTgr99yoHAAAADmVYSWZNTQAqAAAACAAAAAAAAADSU5MAAAAASUVORK5CYII="))
 
 # 2D Array for storing piece locations
 pieces = [[0]*8 for _ in range(8)]
@@ -113,6 +117,15 @@ class pawn(chessPiece): # Jace helped here
 class rook(chessPiece):
     def __init__(self, team, i, j):
         chessPiece.__init__(self, "Rook", team, i, j)
+        if (team == white):
+            self.image = whiteRook
+            self.image_green = whiteRook_green
+        else:
+            self.image = blackRook
+            self.image_green = blackRook_green
+    
+    def generateValidMoves(self):
+        return
     
 
 class knight(chessPiece):
@@ -245,22 +258,35 @@ def generateGame():
             jLabels[i].grid(row = 0, column = i + 1)
         Labels = tk.Label(window, text = "i \ j")
         Labels.grid(row = 0, column = 0)
-        
+    # Place pieces
+    for i in range(0, 8):
+        placeNewPiece(pawn(black, 1, i))
+        placeNewPiece(pawn(white, 6, i))
+        if i in [0, 7]:
+            placeNewPiece(rook(black, 0, i))
+            placeNewPiece(rook(white, 7, i))
+    
+    
+    
     return
 
+# Function for debug hacking pieces
+def hack():
+    if (isSelected == True):
+        for i in range(0, 8):
+            for j in range(0, 8):
+                grid[i][j].is_green = True
+    return
+
+hackButton = tk.Button(window, text = "hack selected piece", command = lambda: hack())
+hackButton.grid(column = 9, row = 0, rowspan = 2)
+if (debug_mode == False):
+    hackButton.destroy()
+
+# main
 generateGame()
 
-for i in range(0,8):
-    placeNewPiece(pawn(white, 6, i))
 
-placeNewPiece(pawn(black, 4, 1))
-placeNewPiece(pawn(black, 5, 5))
-
-for i in range(0,8):
-    placeNewPiece(pawn(black, 1, i))
-
-placeNewPiece(pawn(white, 2, 2))
-placeNewPiece(pawn(white, 3, 5))
 
 
 window.mainloop()
