@@ -66,49 +66,39 @@ class pawn(chessPiece): # Jace helped here
             self.image_green = blackPawn_green
     
     def generateValidMoves(self):
-        # if it hasn't moved and has two spaces in front of it clear
+        # define direction depending on team
+        if (self.team == white):
+            direction = -1
+            eligibleRow = 6
+        else:
+            direction = 1
+            eligibleRow = 1
+        
         try:
-            if (self.team == white and self.i == 6 and pieces[5][self.j] == 0 and pieces[4][self.j] == 0):
-                grid[4][self.j].config(image = empty_green)
-                grid[4][self.j].is_green = True
-            if (self.team == black and self.i == 1 and pieces[2][self.j] == 0 and pieces[3][self.j] == 0):
-                grid[3][self.j].config(image = empty_green)
-                grid[3][self.j].is_green = True
+            # check if pawn is eligible for moving two spaces
+            if (self.i == eligibleRow and pieces[self.i + direction][self.j] == 0 and pieces[self.i + 2 * direction][self.j] == 0):
+                grid[self.i + 2 * direction][self.j].config(image = empty_green)
+                grid[self.i + 2 * direction][self.j].is_green = True
         except:
             None
         
-        # if the space in front of it is clear
         try:
-            if (self.team == white and pieces[self.i - 1][self.j] == 0):
-                grid[self.i - 1][self.j].config(image = empty_green)
-                grid[self.i - 1][self.j].is_green = True
-            if (self.team == black and pieces[self.i + 1][self.j] == 0):
-                grid[self.i + 1][self.j].config(image = empty_green)
-                grid[self.i + 1][self.j].is_green = True
+            # check if the space in front of it is clear
+            if (pieces[self.i + direction][self.j] == 0):
+                grid[self.i + direction][self.j].config(image = empty_green)
+                grid[self.i + direction][self.j].is_green = True
         except:
             None
         
-        # diagonal killing left
-        try:
-            if (self.team == white and pieces[self.i - 1][self.j - 1].team == black):
-                grid[self.i - 1][self.j - 1].config(image = pieces[self.i - 1][self.j - 1].image_green)
-                grid[self.i - 1][self.j - 1].is_green = True
-            if (self.team == black and pieces[self.i + 1][self.j - 1].team == white):
-                grid[self.i + 1][self.j - 1].config(image = pieces[self.i + 1][self.j - 1].image_green)
-                grid[self.i + 1][self.j - 1].is_green = True
-        except:
-            None
-        
-        # diagonal killing right
-        try:
-            if (self.team == white and pieces[self.i - 1][self.j + 1].team == black):
-                grid[self.i - 1][self.j + 1].config(image = pieces[self.i - 1][self.j + 1].image_green)
-                grid[self.i - 1][self.j + 1].is_green = True
-            if (self.team == black and pieces[self.i + 1][self.j + 1].team == white):
-                grid[self.i + 1][self.j + 1].config(image = pieces[self.i + 1][self.j + 1].image_green)
-                grid[self.i + 1][self.j + 1].is_green = True
-        except:
-            None
+        # check for both right and left directions
+        for k in [-1, 1]:
+            try:
+                # check whether the diagonal has an enemy piece
+                if (pieces[self.i + direction][self.j + k].team != self.team):
+                    grid[self.i + direction][self.j + k].config(image = pieces[self.i + direction][self.j + k].image_green)
+                    grid[self.i + direction][self.j + k].is_green = True
+            except:
+                None
         
         # en passant
         #if (enPassant == True):
