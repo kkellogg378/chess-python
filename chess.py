@@ -39,9 +39,9 @@ blackRook         = tk.PhotoImage(data = b64decode("iVBORw0KGgoAAAANSUhEUgAAACAA
 blackRook_green   = tk.PhotoImage(data = b64decode("iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAA8JJREFUWEd9VwlyxCAMg7eE9P/v2cBXmo5tyQfJtu3MboGALMsy6e3W39a6/umP/Cs/5X+swZR/yBpO5SV5zBdvC3rvrdvxvbXbPnw3IOkyRVQA6ZvLI5x30L3deS+NjCFFYNwTABCvYrjbzdAfcVZmnC2PjBFknnZeLUiJXmLv/ZbYnYrtSBkXcmRhbCoB2oBFpqtuy6TnDeP6rIRFFvxZW9r7r8CIvD9zbCdHTnmojNWc9QzCaURqgc0Os4BsTwDfD2Ywu7CqSkM7xhQZ+JYKaEHAaVwCBymvMknlUPSAVO1lkqompiI2YV8j78EZU4fkEFnOYehiHKPNOdt5Do1yrtl0bE3lcZyYP4bSqmvHaJfMO/VWDJaZEKbDrFrl4UYlDxvjVJ7l4BOHcbtrrTaOQ7eWg2XeAIROVCOafNOFitB9wO3naUgCwBg0GjXXWVSQ07U+7TxOj0+AOuk5bV6GqexNP8CTnPG+exvj0NnP+rSf46xm4OKxSK91tXP86HdJRbGevC9n+i3EoNCSill83F9ZyAm16rf6LozYsjXn09DAICtOHg2pcrIoPPI1NPKoFfpQuAK3tRGhn6UZNY9STTpEGYZ/ZzEWf7ybKltVvNWsVyrMZc61tTRj6dk3hAFxQqFTxPVSz1SxHHJoGky+dL0AGcgseng97Oab19oq5lAjSBxk1FhDFlLqcZihn/PyEitEPQRoEJMPyFeIIvtvTm23inBD0RMsckiyXaJ8NxsI1Ns4V92+R7Li2liUshcgrIbduLh4rctZNONxzaOIQLjujdSHkqtY6iGmK7HdKhYyYMNqz0ijzTCKTbnOHNoxrSD3c2LPBwoDUYLPksgC9Of3TRUTw85O4qjs0R2z8BmlGN7JtQLsuuB+oO+tMecrYLkPKCiElyynQBmDKajU0yXVAYGI1y7LQoaC71plv13sPi6lyW857EOtlS4IL+Ylzzol/f9fBsLVrQq8T292z1T5zRhl+JYeJHxpByxN49Xeonx5W3SjoG7TjSa1DG9Kj22NVgewl7A3opo6vZTS3627vXh97+2Qlpy7ntdoesA3aK34gdCcAaXv6AUQSagnXbmlB9RO6DeHBMIaTbTm3BFfK8oZlBTwTabc1exgvDhESWdje9Rpbl1xATVzqo4Y7xT5Wu46qLf1cHvog6Ll25zbLQ5Jbz4Fb7mOw7z5ZsQk5bZsWpa7gtSrhbvf8dwVM4hNgG9mFJWfrNgH396Uvlwonm65v57BYl72lODeU/wvtRsL3npJ9t58tvdOBoJlf8TrTgr99yoHAAAADmVYSWZNTQAqAAAACAAAAAAAAADSU5MAAAAASUVORK5CYII="))
 
 whiteBishop       = tk.PhotoImage(data = b64decode("iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAA0RJREFUWEeVVwly2zAMBNtX1JYnD2qcvjVxPpRa6jfYWRwkSIK0o8lMZJ7AYrGAEgVPIqI8jI+j+8eFl21vd0xOnnGfjeB/Sokoj7eVw2JjZPr42DJRovNgQKJEeXSCDzNb5VLc7xZOrktEKbeoHOp9xgQl2q533FoXuffo1IKCvKyWeGRlHTzPKbFR+G1Obddd3GsMDkLgUG9j13ugd7P3uvJ4v7C9p9cv+vf5wvHDwOn6RT/TjzQ6M4eCOcB//HA4O/bVAbztty0zX+C97SGiX693/n3cLoSZkRNzphfIxMXIiLp5v12UWVgnW0+///IrLocHeD+DD/0zp5fhHBOoTwdmPmKI65iYEnA+PyMlD50dvS4Z10Slt6wDoky7dYyEmCChkFfx3EVU+RhoSjVuhMoA0QurRLSWgg8egZIBDaAT3M0ysVueQZCCvRi642LbpG/4J0hkOv/ZoUFd5OSwyBzdOpFCt4Nz3yV4VR05AvE3VcNpVZ7Ha705Lgs60jT75Ae0v+EEExFCJBbwP1ZFCNKkmnRQK5qLWAVMKjLMocuUs+Bh+R/7bGxtHW1IyBufsAVZIIKUaypSpu2tSvGS+o6oowGBgvSVDRkAS9l7pCJLdabt2mmAT+nQMUbOzTQBntdoDgFDb8QTPx5KcG+EKwTOjLb2+j0GF1KxqLZbvlLBPjFL+o+CGdQkl9WHFSSTPyZp5ULhwTMk8EIUGRKN7VoLUk4cd0ZC8q/KcV9AJqKmW4L8d/pujogKig7ImGwXGoKE2qC4ajjcOzEkdt4zWLVgf98yvJUMdD0fk0mNybUfeJDRUgLW0NcjEPtSApT9nIJcAqSPsLAgMuDCotdtgrRinfR/dpHcppXLx0mPsHnnV9OyxyGoLXQ/b81nqWRFfKz62YxIMsTJumQfopoZI94uBH3GC4BcgLpvh9ZQ5bJ2RazlKlIAQtTR14F2d6mqEWFq+62S69SvNKdNRigSSi/e5UgZqPyahNz1aAMIaDlYpQipYx762plwOEwe+KMlfGoHtyTig8nIsaqDCxHSShTH/lllXIpIyfQgIa2JWa0xoTDJDPPaMzT4hqznF6kavkYDJwSVeraFsDJ+8un73WjRf11dvzkcNBxSAAAADmVYSWZNTQAqAAAACAAAAAAAAADSU5MAAAAASUVORK5CYII="))
-whiteBishop_green = tk.PhotoImage(data = b64decode("")
-blackBishop       = tk.PhotoImage(data = b64decode("")
-blackBishop_green = tk.PhotoImage(data = b64decode("")
+#whiteBishop_green = tk.PhotoImage(data = b64decode("")
+#blackBishop       = tk.PhotoImage(data = b64decode("")
+#blackBishop_green = tk.PhotoImage(data = b64decode("")
 
 # 2D Array for storing piece locations
 pieces = [[0]*8 for _ in range(8)]
@@ -169,10 +169,10 @@ class bishop(chessPiece):
         chessPiece.__init__(self, "Bishop", team, i, j)
         if (team == white):
             self.image = whiteBishop
-            self.image_green = whiteBishop_green
-        else:
-            self.image = blackBishop
-            self.image_green = blackBishop_green
+        #    self.image_green = whiteBishop_green
+        #else:
+        #    self.image = blackBishop
+        #    self.image_green = blackBishop_green
 
 class queen(chessPiece):
     def __init__(self, team, i, j):
@@ -218,11 +218,14 @@ def movePiece(oldi, oldj, i, j):
     pieces[i][j].j = j
     pieces[oldi][oldj] = 0
     grid[oldi][oldj].config(image = empty)
+    
     revert()
+    
     if (whosTurn == white):
         whosTurn = black
     else:
         whosTurn = white
+    
     if (pieces[i][j].pieceType == "Pawn" and abs(oldi - i) == 2):
         enPassant = True
         enPassant_j = j
@@ -301,9 +304,9 @@ def generateGame():
         if i in [0, 7]:
             placeNewPiece(rook(black, 0, i))
             placeNewPiece(rook(white, 7, i))
-        if i in [2, 5]:
+        #if i in [2, 5]:
             #placeNewPiece(bishop(black, 0, i))
-            placeNewPiece(bishop(white, 7, i))
+            #placeNewPiece(bishop(white, 7, i))
     
     
     
