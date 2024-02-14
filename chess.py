@@ -6,6 +6,7 @@ from functools import partial
 debug_mode = True
 isSelected = False
 enPassant = False
+checkingIfCheck = False
 
 # Variables
 white = "White"
@@ -24,7 +25,7 @@ window.title("Chess Python")
 window['padx'] = 10
 window['pady'] = 10
 
-# Image references
+# Image references (kudos to Seth Glasscock for these)
 empty = tk.PhotoImage(width = 1, height = 1)
 empty_green = tk.PhotoImage(data = b64decode("iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAC9JREFUWEft0EERAAAMwjDwL3qTwSdV0EtzuQyrAQIECBAgQIAAAQIECBAgQGAt8IXeP+HAVxIZAAAAAElFTkSuQmCC"))
 
@@ -99,7 +100,7 @@ class pawn(chessPiece): # Jace helped here
         
         try:
             # check if pawn is eligible for moving two spaces
-            if (self.i == eligibleRow and grid[self.i + direction][self.j].piece == 0 and grid[self.i + 2 * direction][self.j].piece == 0):
+            if (self.i == eligibleRow and all(grid[self.i + k * direction][self.j].piece == 0 for k in [1, 2]) and willKingBeInCheck(self.i, self.j, self.i + 2 * direction, self.j) == False):
                 grid[self.i + 2 * direction][self.j].config(image = empty_green)
                 grid[self.i + 2 * direction][self.j].is_green = True
         except:
@@ -107,7 +108,7 @@ class pawn(chessPiece): # Jace helped here
         
         try:
             # check if the space in front of it is clear
-            if (grid[self.i + direction][self.j].piece == 0):
+            if (grid[self.i + direction][self.j].piece == 0 and willKingBeInCheck(self.i, self.j, self.i + direction, self.j) == False):
                 grid[self.i + direction][self.j].config(image = empty_green)
                 grid[self.i + direction][self.j].is_green = True
         except:
@@ -117,7 +118,7 @@ class pawn(chessPiece): # Jace helped here
         for k in [-1, 1]:
             try:
                 # check whether the diagonal has an enemy piece
-                if (grid[self.i + direction][self.j + k].piece.team != self.team):
+                if (grid[self.i + direction][self.j + k].piece.team != self.team and willKingBeInCheck(self.i, self.j, self.i + direction, self.j + k) == False):
                     grid[self.i + direction][self.j + k].config(image = grid[self.i + direction][self.j + k].piece.image_green)
                     grid[self.i + direction][self.j + k].is_green = True
             except:
@@ -144,7 +145,7 @@ class knight(chessPiece):
             self.image_green = blackKnight_green
     
     def generateValidMoves(self):
-        validMove([-2, -2, 2, 2, -1, 1, -1, 1], [-1, 1, -1, 1, -2, -2, 2, 2])
+        validMove([-2, -2, 2, 2, -1, 1, -1, 1], [-1, 1, -1, 1, -2, -2, 2, 2], self.i, self.j)
         return
     
 # Bishop class
@@ -159,7 +160,7 @@ class bishop(chessPiece):
             self.image_green = blackBishop_green
         
     def generateValidMoves(self):
-        validMove([1, 1, -1, -1], [1, -1, 1, -1])
+        validMove([1, 1, -1, -1], [1, -1, 1, -1], self.i, self.j)
         return
     
 # Rook class
@@ -174,7 +175,7 @@ class rook(chessPiece):
             self.image_green = blackRook_green
     
     def generateValidMoves(self):
-        validMove([-1, 0, 1, 0], [0, -1, 0, 1])
+        validMove([-1, 0, 1, 0], [0, -1, 0, 1], self.i, self.j)
         return
     
 # Queen class
@@ -189,7 +190,7 @@ class queen(chessPiece):
             self.image_green = blackQueen_green
     
     def generateValidMoves(self):
-        validMove([-1, 0, 1, 0, 1, 1, -1, -1], [0, -1, 0, 1, 1, -1, 1, -1])
+        validMove([-1, 0, 1, 0, 1, 1, -1, -1], [0, -1, 0, 1, 1, -1, 1, -1], self.i, self.j)
         return
     
 # King class
@@ -204,38 +205,108 @@ class king(chessPiece):
             self.image_green = blackKing_green
     
     def generateValidMoves(self):
-        validMove([-1, 0, 1, 0, 1, 1, -1, -1], [0, -1, 0, 1, 1, -1, 1, -1])
+        validMove([-1, 0, 1, 0, 1, 1, -1, -1], [0, -1, 0, 1, 1, -1, 1, -1], self.i, self.j)
         return
     
 
 # Function that takes two sets of directions and generates valid moves in those directions
-def validMove(iMatrix, jMatrix):
+def validMove(iMatrix, jMatrix, selI, selJ):
     for i in range(len(iMatrix)):
-        curI = grid[selected_i][selected_j].piece.i
-        curJ = grid[selected_i][selected_j].piece.j
+        curI = selI
+        curJ = selJ
         while True:
             try:
                 curI += iMatrix[i]
                 curJ += jMatrix[i]
-                # handle pieces being able to "pacman" vertically
+                
+                # Handle pieces being able to "pacman" vertically
                 if (curI < 0 or curJ < 0):
                     break
-                # check if next space is empty
+                
+                # Check if next space is empty
                 if (grid[curI][curJ].piece == 0):
-                    grid[curI][curJ].config(image = empty_green)
-                    grid[curI][curJ].is_green = True
-                    # break if selected piece is a knight or king (they can't move more than one space)
-                    if (grid[selected_i][selected_j].piece.pieceType == "Knight" or grid[selected_i][selected_j].piece.pieceType == "King"):
+                    # Check if move will put king in check
+                    if (willKingBeInCheck(selI, selJ, curI, curJ) == False):
+                        grid[curI][curJ].config(image = empty_green)
+                        grid[curI][curJ].is_green = True
+                    
+                    # Break if selected piece is a knight or king (they can't move more than one space)
+                    if (grid[selI][selJ].piece.pieceType in ["Knight", "King"]):
                         break
                     else:
                         continue
-                # check if next space is an enemy piece
-                if (grid[curI][curJ].piece.team != grid[selected_i][selected_j].piece.team):
+                
+                # Check if next space is an enemy piece, check if move will put king in check
+                if (grid[curI][curJ].piece.team != grid[selI][selJ].piece.team and willKingBeInCheck(selI, selJ, curI, curJ) == False):
                     grid[curI][curJ].config(image = grid[curI][curJ].piece.image_green)
                     grid[curI][curJ].is_green = True
             except:
                 None
             break
+
+# Function for testing whether a move will put the king in check
+def willKingBeInCheck(selI, selJ, destI, destJ):
+    # Define global variables
+    global checkingIfCheck, isSelected
+    
+    # Avoid recursiveness
+    if (checkingIfCheck == True):
+        return False
+    
+    # Update flags
+    checkingIfCheck = True
+    
+    # Temporarily move piece
+    tempPiece = grid[destI][destJ].piece
+    grid[destI][destJ].piece = grid[selI][selJ].piece
+    grid[selI][selJ].piece = 0
+    
+    # Backup which locations were already green
+    greenBackup = [[False]*8 for _ in range(8)]
+    
+    # Find matching king
+    kingI, kingJ = -1, -1
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if (grid[i][j].piece != 0 and grid[i][j].piece.pieceType == "King" and grid[i][j].piece.team == grid[destI][destJ].piece.team):
+                kingI, kingJ = i, j
+            
+            if (grid[i][j].is_green == True):
+                greenBackup[i][j] = True
+    
+    # Find all possible moves by enemy pieces
+    revert() # clear green
+    isSelected = True
+    returnVal = False
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if (grid[i][j].piece != 0 and grid[i][j].piece.team != grid[destI][destJ].piece.team):
+                grid[i][j].piece.generateValidMoves()
+                if (grid[kingI][kingJ].is_green == True):
+                    returnVal = True
+    
+    # Move piece back
+    grid[selI][selJ].piece = grid[destI][destJ].piece
+    grid[destI][destJ].piece = tempPiece
+    tempPiece = 0
+    
+    # Restore previous green spaces
+    revert()
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if (greenBackup[i][j] == True):
+                if (grid[i][j].piece == 0):
+                    grid[i][j].config(image = empty_green)
+                    grid[i][j].is_green = True
+                else:
+                    grid[i][j].config(image = grid[i][j].piece.image_green)
+                    grid[i][j].is_green = True
+    
+    # Update flags
+    checkingIfCheck = False
+    isSelected = True
+    
+    return returnVal
 
 # Function for reverting greened spaces to regular
 def revert():
@@ -275,13 +346,7 @@ def movePiece(oldi, oldj, i, j):
     grid[oldi][oldj].config(image = empty)
     
     revert()
-    
     updateWhosTurn()
-    
-    #if (whosTurn == white):
-    #    whosTurn = black
-    #else:
-    #    whosTurn = white
     
     if (grid[i][j].piece.pieceType == "Pawn" and abs(oldi - i) == 2):
         enPassant = True
@@ -332,8 +397,8 @@ def left(i, j):
         return
     
     # if a piece is already selected, hide previous valid moves
-    if (isSelected == True):
-        revert()
+    #if (isSelected == True):
+    revert()
     
     # select current square
     isSelected = True
@@ -410,6 +475,7 @@ def generateGame():
 
 # Function for debug hacking pieces
 def hack():
+    print("isSelected:", isSelected)
     if (isSelected == True):
         for i in range(0, 8):
             for j in range(0, 8):
