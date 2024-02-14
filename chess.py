@@ -7,13 +7,13 @@ debug_mode = True
 isSelected = False
 enPassant = False
 
-# References
+# Variables
 white = "White"
 black = "Black"
-selected_i = 8 # 8 means none selected
-selected_j = 8
+selected_i = 0
+selected_j = 0
 whosTurn = white
-enPassant_j = 8
+enPassant_j = 0
 
 # Define tkinter window
 window = tk.Tk()
@@ -58,13 +58,14 @@ blackQueen_green  = tk.PhotoImage(data = b64decode("iVBORw0KGgoAAAANSUhEUgAAACAA
 #blackKing         = tk.PhotoImage(data = b64decode(""))
 #blackKing_green   = tk.PhotoImage(data = b64decode(""))
 
+# Class for a custom button that has a flag and an object
 class CustomButton(tk.Button):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.is_green = False
         self.piece = 0
     
-
+# General class for a chess piece that stores the type, color, and location
 class chessPiece:
     def __init__(self, pieceType, team, i, j):
         self.pieceType = pieceType
@@ -75,7 +76,7 @@ class chessPiece:
     def __str__(self):
         return f"{team} {self.pieceType}"
     
-
+# Pawn class that has a unique generateValidMoves() function
 class pawn(chessPiece): # Jace helped here
     def __init__(self, team, i, j):
         chessPiece.__init__(self, "Pawn", team, i, j)
@@ -130,7 +131,7 @@ class pawn(chessPiece): # Jace helped here
         
         return
     
-
+# Knight class
 class knight(chessPiece):
     def __init__(self, team, i, j):
         chessPiece.__init__(self, "Knight", team, i, j)
@@ -145,7 +146,7 @@ class knight(chessPiece):
         validMove([-2, -2, 2, 2, -1, 1, -1, 1], [-1, 1, -1, 1, -2, -2, 2, 2])
         return
     
-
+# Bishop class
 class bishop(chessPiece):
     def __init__(self, team, i, j):
         chessPiece.__init__(self, "Bishop", team, i, j)
@@ -160,7 +161,7 @@ class bishop(chessPiece):
         validMove([1, 1, -1, -1], [1, -1, 1, -1])
         return
     
-
+# Rook class
 class rook(chessPiece):
     def __init__(self, team, i, j):
         chessPiece.__init__(self, "Rook", team, i, j)
@@ -175,7 +176,7 @@ class rook(chessPiece):
         validMove([-1, 0, 1, 0], [0, -1, 0, 1])
         return
     
-
+# Queen class
 class queen(chessPiece):
     def __init__(self, team, i, j):
         chessPiece.__init__(self, "Queen", team, i, j)
@@ -191,13 +192,13 @@ class queen(chessPiece):
         validMove([-1, 0, 1, 0, 1, 1, -1, -1], [0, -1, 0, 1, 1, -1, 1, -1])
         return
     
-
+# King class
 class king(chessPiece):
     def __init__(self, team, i, j):
         chessPiece.__init__(self, "King", team, i, j)
     
 
-# Helper function for finding valid moves
+# Function that takes two sets of directions and generates valid moves in those directions
 def validMove(iMatrix, jMatrix):
     for i in range(len(iMatrix)):
         curI = grid[selected_i][selected_j].piece.i
@@ -231,10 +232,10 @@ def revert():
     # Define global variables
     global isSelected, selected_i, selected_j
     
+    # Deselect previous selection
     isSelected = False
-    #selected_i = 8
-    #selected_j = 8
     
+    # Clear all green spaces
     for i in range(0, 8):
         for j in range(0, 8):
             if (grid[i][j].is_green == True):
@@ -246,12 +247,13 @@ def revert():
     
     return
 
+# Function for placing a new piece
 def placeNewPiece(piece):
-    global grid
     grid[piece.i][piece.j].piece = piece
     grid[piece.i][piece.j].config(image = piece.image)
     return
 
+# Function for moving a piece
 def movePiece(oldi, oldj, i, j):
     # Define global variables
     global whosTurn, enPassant
@@ -274,11 +276,12 @@ def movePiece(oldi, oldj, i, j):
         enPassant_j = j
     elif (enPassant == True):
         enPassant == False
-        enPassant_j = 8
+        #enPassant_j = 8
     else:
         None
     return
 
+# Function for left click on button
 def left(i, j):
     # Define global variables
     global isSelected, selected_i, selected_j
@@ -316,10 +319,12 @@ def left(i, j):
     
     return
 
+# Function for right click on button (unused)
 def right(i, j):
     print("right,", i, j)
     return
 
+# Function for generating a new game
 def generateGame():
     global grid
     grid = [[0]*8 for _ in range(8)]
@@ -357,8 +362,6 @@ def generateGame():
             placeNewPiece(queen(black, 0, i))
             placeNewPiece(queen(white, 7, i))
     
-    
-    
     return
 
 # Function for debug hacking pieces
@@ -369,16 +372,13 @@ def hack():
                 grid[i][j].is_green = True
     return
 
+# Debug hacking button
 hackButton = tk.Button(window, text = "hack selected piece", command = lambda: hack())
 hackButton.grid(column = 9, row = 0, rowspan = 2)
 if (debug_mode == False):
     hackButton.destroy()
 
-# main
+# main function
 generateGame()
 
-
-
-
 window.mainloop()
-    
