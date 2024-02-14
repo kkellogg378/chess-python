@@ -191,18 +191,18 @@ def validMove(iMatrix, jMatrix):
     for i in range(len(iMatrix)):
         curI = grid[selected_i][selected_j].piece.i
         curJ = grid[selected_i][selected_j].piece.j
-        
         while True:
             try:
                 curI += iMatrix[i]
                 curJ += jMatrix[i]
-                # handle pieces being able to pacman vertically
+                # handle pieces being able to "pacman" vertically
                 if (curI < 0 or curJ < 0):
                     break
                 # check if next space is empty
                 if (grid[curI][curJ].piece == 0):
                     grid[curI][curJ].config(image = empty_green)
                     grid[curI][curJ].is_green = True
+                    # break if selected piece is a knight or king (they can't move more than one space)
                     if (grid[selected_i][selected_j].piece.pieceType == "Knight" or grid[selected_i][selected_j].piece.pieceType == "King"):
                         break
                     else:
