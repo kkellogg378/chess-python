@@ -136,46 +136,6 @@ class pawn(chessPiece): # Jace helped here
         return
     
 
-class rook(chessPiece):
-    def __init__(self, team, i, j):
-        chessPiece.__init__(self, "Rook", team, i, j)
-        if (team == white):
-            self.image = whiteRook
-            self.image_green = whiteRook_green
-        else:
-            self.image = blackRook
-            self.image_green = blackRook_green
-    
-    def generateValidMoves(self):
-        iMatrix = [-1, 0, 1, 0]
-        jMatrix = [0, -1, 0, 1]
-        
-        for i in range(0, 4):
-            curI = self.i 
-            curJ = self.j 
-            while True:
-                try:
-                    curI += iMatrix[i]
-                    curJ += jMatrix[i]
-                    # handle rooks being able to pacman vertically
-                    if (curI < 0 or curJ < 0):
-                        break
-                    # check if next space is empty
-                    if (pieces[curI][curJ] == 0):
-                        grid[curI][curJ].config(image = empty_green)
-                        grid[curI][curJ].is_green = True
-                        continue
-                    # check if next space is an enemy piece
-                    if (pieces[curI][curJ].team != self.team):
-                        grid[curI][curJ].config(image = pieces[curI][curJ].image_green)
-                        grid[curI][curJ].is_green = True
-                        break
-                except:
-                    None
-                break
-        return
-    
-
 class knight(chessPiece):
     def __init__(self, team, i, j):
         chessPiece.__init__(self, "Knight", team, i, j)
@@ -235,6 +195,46 @@ class bishop(chessPiece):
                     curI += iMatrix[i]
                     curJ += jMatrix[i]
                     # handle bishops being able to pacman vertically
+                    if (curI < 0 or curJ < 0):
+                        break
+                    # check if next space is empty
+                    if (pieces[curI][curJ] == 0):
+                        grid[curI][curJ].config(image = empty_green)
+                        grid[curI][curJ].is_green = True
+                        continue
+                    # check if next space is an enemy piece
+                    if (pieces[curI][curJ].team != self.team):
+                        grid[curI][curJ].config(image = pieces[curI][curJ].image_green)
+                        grid[curI][curJ].is_green = True
+                        break
+                except:
+                    None
+                break
+        return
+    
+
+class rook(chessPiece):
+    def __init__(self, team, i, j):
+        chessPiece.__init__(self, "Rook", team, i, j)
+        if (team == white):
+            self.image = whiteRook
+            self.image_green = whiteRook_green
+        else:
+            self.image = blackRook
+            self.image_green = blackRook_green
+    
+    def generateValidMoves(self):
+        iMatrix = [-1, 0, 1, 0]
+        jMatrix = [0, -1, 0, 1]
+        
+        for i in range(0, 4):
+            curI = self.i 
+            curJ = self.j 
+            while True:
+                try:
+                    curI += iMatrix[i]
+                    curJ += jMatrix[i]
+                    # handle rooks being able to pacman vertically
                     if (curI < 0 or curJ < 0):
                         break
                     # check if next space is empty
