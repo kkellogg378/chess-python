@@ -142,19 +142,7 @@ class knight(chessPiece):
             self.image_green = blackKnight_green
     
     def generateValidMoves(self):
-        iMatrix = [-2, -2, 2, 2, -1, 1, -1, 1]
-        jMatrix = [-1, 1, -1, 1, -2, -2, 2, 2]
-        
-        for i in range(0, 8):
-            curI = self.i + iMatrix[i]
-            curJ = self.j + jMatrix[i]
-            # handle knights being able to pacman vertically
-            try:
-                validMove(curI, curJ)
-            except:
-                None
-            continue
-        
+        validMove([-2, -2, 2, 2, -1, 1, -1, 1], [-1, 1, -1, 1, -2, -2, 2, 2])
         return
     
 
@@ -169,21 +157,7 @@ class bishop(chessPiece):
             self.image_green = blackBishop_green
         
     def generateValidMoves(self):
-        iMatrix = [1, 1, -1, -1]
-        jMatrix = [1, -1, 1, -1]
-        
-        for i in range(0, 4):
-            curI = self.i 
-            curJ = self.j 
-            while True:
-                try:
-                    curI += iMatrix[i]
-                    curJ += jMatrix[i]
-                    if (validMove(curI, curJ) == True):
-                        continue
-                except:
-                    None
-                break
+        validMove([1, 1, -1, -1], [1, -1, 1, -1])
         return
     
 
@@ -198,22 +172,7 @@ class rook(chessPiece):
             self.image_green = blackRook_green
     
     def generateValidMoves(self):
-        iMatrix = [-1, 0, 1, 0]
-        jMatrix = [0, -1, 0, 1]
-        
-        for i in range(0, 4):
-            curI = self.i 
-            curJ = self.j 
-            running = True
-            while True:
-                try:
-                    curI += iMatrix[i]
-                    curJ += jMatrix[i]
-                    if (validMove(curI, curJ) == True):
-                        continue
-                except:
-                    None
-                break
+        validMove([-1, 0, 1, 0], [0, -1, 0, 1])
         return
     
 
@@ -228,20 +187,33 @@ class king(chessPiece):
     
 
 # Helper function for finding valid moves
-def validMove(curI, curJ):
-    # handle pieces being able to pacman vertically
-    if (curI < 0 or curJ < 0):
-        return False
-    # check if next space is empty
-    if (grid[curI][curJ].piece == 0):
-        grid[curI][curJ].config(image = empty_green)
-        grid[curI][curJ].is_green = True
-        return True
-    # check if next space is an enemy piece
-    if (grid[curI][curJ].piece.team != grid[selected_i][selected_j].piece.team):
-        grid[curI][curJ].config(image = grid[curI][curJ].piece.image_green)
-        grid[curI][curJ].is_green = True
-    return False
+def validMove(iMatrix, jMatrix):
+    for i in range(len(iMatrix)):
+        curI = grid[selected_i][selected_j].piece.i
+        curJ = grid[selected_i][selected_j].piece.j
+        
+        while True:
+            try:
+                curI += iMatrix[i]
+                curJ += jMatrix[i]
+                # handle pieces being able to pacman vertically
+                if (curI < 0 or curJ < 0):
+                    break
+                # check if next space is empty
+                if (grid[curI][curJ].piece == 0):
+                    grid[curI][curJ].config(image = empty_green)
+                    grid[curI][curJ].is_green = True
+                    if (grid[selected_i][selected_j].piece.pieceType == "Knight" or grid[selected_i][selected_j].piece.pieceType == "King"):
+                        break
+                    else:
+                        continue
+                # check if next space is an enemy piece
+                if (grid[curI][curJ].piece.team != grid[selected_i][selected_j].piece.team):
+                    grid[curI][curJ].config(image = grid[curI][curJ].piece.image_green)
+                    grid[curI][curJ].is_green = True
+            except:
+                None
+            break
 
 # Function for reverting greened spaces to regular
 def revert():
