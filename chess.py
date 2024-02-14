@@ -58,16 +58,11 @@ blackKnight_green = tk.PhotoImage(data = b64decode("iVBORw0KGgoAAAANSUhEUgAAACAA
 #blackKing         = tk.PhotoImage(data = b64decode(""))
 #blackKing_green   = tk.PhotoImage(data = b64decode(""))
 
-
-
-
-# 2D Array for storing piece locations
-pieces = [[0]*8 for _ in range(8)]
-
 class CustomButton(tk.Button):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.is_green = False
+        self.piece = 0
     
 
 class chessPiece:
@@ -102,7 +97,7 @@ class pawn(chessPiece): # Jace helped here
         
         try:
             # check if pawn is eligible for moving two spaces
-            if (self.i == eligibleRow and pieces[self.i + direction][self.j] == 0 and pieces[self.i + 2 * direction][self.j] == 0):
+            if (self.i == eligibleRow and grid[self.i + direction][self.j].piece == 0 and grid[self.i + 2 * direction][self.j].piece == 0):
                 grid[self.i + 2 * direction][self.j].config(image = empty_green)
                 grid[self.i + 2 * direction][self.j].is_green = True
         except:
@@ -110,7 +105,7 @@ class pawn(chessPiece): # Jace helped here
         
         try:
             # check if the space in front of it is clear
-            if (pieces[self.i + direction][self.j] == 0):
+            if (grid[self.i + direction][self.j].piece == 0):
                 grid[self.i + direction][self.j].config(image = empty_green)
                 grid[self.i + direction][self.j].is_green = True
         except:
@@ -120,8 +115,8 @@ class pawn(chessPiece): # Jace helped here
         for k in [-1, 1]:
             try:
                 # check whether the diagonal has an enemy piece
-                if (pieces[self.i + direction][self.j + k].team != self.team):
-                    grid[self.i + direction][self.j + k].config(image = pieces[self.i + direction][self.j + k].image_green)
+                if (grid[self.i + direction][self.j + k].piece.team != self.team):
+                    grid[self.i + direction][self.j + k].config(image = grid[self.i + direction][self.j + k].piece.image_green)
                     grid[self.i + direction][self.j + k].is_green = True
             except:
                 None
@@ -158,13 +153,13 @@ class knight(chessPiece):
                 continue
             try:
                 # check if space is empty
-                if (pieces[curI][curJ] == 0):
+                if (grid[curI][curJ].piece == 0):
                     grid[curI][curJ].config(image = empty_green)
                     grid[curI][curJ].is_green = True
                     continue
                 # check if space is an enemy piece
-                if (pieces[curI][curJ].team != self.team):
-                    grid[curI][curJ].config(image = pieces[curI][curJ].image_green)
+                if (grid[curI][curJ].piece.team != self.team):
+                    grid[curI][curJ].config(image = grid[curI][curJ].piece.image_green)
                     grid[curI][curJ].is_green = True
             except:
                 None
@@ -198,13 +193,13 @@ class bishop(chessPiece):
                     if (curI < 0 or curJ < 0):
                         break
                     # check if next space is empty
-                    if (pieces[curI][curJ] == 0):
+                    if (grid[curI][curJ].piece == 0):
                         grid[curI][curJ].config(image = empty_green)
                         grid[curI][curJ].is_green = True
                         continue
                     # check if next space is an enemy piece
-                    if (pieces[curI][curJ].team != self.team):
-                        grid[curI][curJ].config(image = pieces[curI][curJ].image_green)
+                    if (grid[curI][curJ].piece.team != self.team):
+                        grid[curI][curJ].config(image = grid[curI][curJ].piece.image_green)
                         grid[curI][curJ].is_green = True
                         break
                 except:
@@ -238,13 +233,13 @@ class rook(chessPiece):
                     if (curI < 0 or curJ < 0):
                         break
                     # check if next space is empty
-                    if (pieces[curI][curJ] == 0):
+                    if (grid[curI][curJ].piece == 0):
                         grid[curI][curJ].config(image = empty_green)
                         grid[curI][curJ].is_green = True
                         continue
                     # check if next space is an enemy piece
-                    if (pieces[curI][curJ].team != self.team):
-                        grid[curI][curJ].config(image = pieces[curI][curJ].image_green)
+                    if (grid[curI][curJ].piece.team != self.team):
+                        grid[curI][curJ].config(image = grid[curI][curJ].piece.image_green)
                         grid[curI][curJ].is_green = True
                         break
                 except:
@@ -275,17 +270,17 @@ def revert():
     for i in range(0, 8):
         for j in range(0, 8):
             if (grid[i][j].is_green == True):
-                if (pieces[i][j] == 0):
+                if (grid[i][j].piece == 0):
                     grid[i][j].config(image = empty)
                 else:
-                    grid[i][j].config(image = pieces[i][j].image)
+                    grid[i][j].config(image = grid[i][j].piece.image)
                 grid[i][j].is_green = False
     
     return
 
 def placeNewPiece(piece):
     global grid
-    pieces[piece.i][piece.j] = piece
+    grid[piece.i][piece.j].piece = piece
     grid[piece.i][piece.j].config(image = piece.image)
     return
 
@@ -293,10 +288,10 @@ def movePiece(oldi, oldj, i, j):
     # Define global variables
     global whosTurn, enPassant
     
-    pieces[i][j] = pieces[oldi][oldj]
-    pieces[i][j].i = i
-    pieces[i][j].j = j
-    pieces[oldi][oldj] = 0
+    grid[i][j].piece = grid[oldi][oldj].piece
+    grid[i][j].piece.i = i
+    grid[i][j].piece.j = j
+    grid[oldi][oldj].piece = 0
     grid[oldi][oldj].config(image = empty)
     
     revert()
@@ -306,7 +301,7 @@ def movePiece(oldi, oldj, i, j):
     else:
         whosTurn = white
     
-    if (pieces[i][j].pieceType == "Pawn" and abs(oldi - i) == 2):
+    if (grid[i][j].piece.pieceType == "Pawn" and abs(oldi - i) == 2):
         enPassant = True
         enPassant_j = j
     elif (enPassant == True):
@@ -325,12 +320,12 @@ def left(i, j):
         return
     
     # if selected space is empty
-    if (pieces[i][j] == 0):
+    if (grid[i][j].piece == 0):
         print("empty")
         return
     
     # if selected space has the wrong team
-    if (pieces[i][j].team != whosTurn):
+    if (grid[i][j].piece.team != whosTurn):
         print("wrong team")
         return
     
@@ -349,7 +344,7 @@ def left(i, j):
     print("selected", i, j)
     
     # generate valid moves
-    pieces[i][j].generateValidMoves()
+    grid[i][j].piece.generateValidMoves()
     
     return
 
