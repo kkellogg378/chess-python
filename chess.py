@@ -276,10 +276,12 @@ def movePiece(oldi, oldj, i, j):
     
     revert()
     
-    if (whosTurn == white):
-        whosTurn = black
-    else:
-        whosTurn = white
+    updateWhosTurn()
+    
+    #if (whosTurn == white):
+    #    whosTurn = black
+    #else:
+    #    whosTurn = white
     
     if (grid[i][j].piece.pieceType == "Pawn" and abs(oldi - i) == 2):
         enPassant = True
@@ -291,11 +293,25 @@ def movePiece(oldi, oldj, i, j):
         None
     return
 
+# Function for updating a label that shows who's turn it is
+def updateWhosTurn():
+    # Define global variables
+    global whosTurn
+    
+    # Switch who's turn it is
+    if (whosTurn == white):
+        whosTurn = black
+    else:
+        whosTurn = white
+    whosTurnLabel.config(text = whosTurn + "'s Turn")
+    return
+
 # Function for left click on button
 def left(i, j):
     # Define global variables
     global isSelected, selected_i, selected_j
     
+    # if selected space is green
     if (grid[i][j].is_green == True):
         movePiece(selected_i, selected_j, i, j)
         return
@@ -310,6 +326,7 @@ def left(i, j):
         print("wrong team")
         return
     
+    # deselect if selected space is the selected piece
     if (isSelected == True and i == selected_i and j == selected_j):
         revert()
         return
@@ -336,17 +353,24 @@ def right(i, j):
 
 # Function for generating a new game
 def generateGame():
-    global grid
+    # Define global variables
+    global grid, whosTurnLabel
+    
+    # Define variables
     grid = [[0]*8 for _ in range(8)]
     iLabels = [0 for _ in range(8)]
     jLabels = [0 for _ in range(8)]
     k = 0
+    
+    # Generate grid of custom buttons
     for i in range(0, 8):
         for j in range(0, 8):
             grid[i][j] = CustomButton(window, image = empty, width = 32, height = 32, command = None)
             grid[i][j].grid(column = j+1, row = i+1)
             grid[i][j].bind('<Button-1>', lambda k=k, i=i, j=j: left(i, j))
             grid[i][j].bind('<Button-3>', lambda k=k, i=i, j=j: right(i, j))
+    
+    # Generate debug tools
     if (debug_mode == True):
         for i in range(0, 8):
             iLabels[i] = tk.Label(window, text = str(i))
@@ -355,6 +379,9 @@ def generateGame():
             jLabels[i].grid(row = 0, column = i + 1)
         Labels = tk.Label(window, text = "i \ j")
         Labels.grid(row = 0, column = 0)
+        hackButton = tk.Button(window, text = "hack selected piece", command = lambda: hack())
+        hackButton.grid(column = 9, row = 0, rowspan = 2)
+    
     # Place pieces
     for i in range(0, 8):
         placeNewPiece(pawn(black, 1, i))
@@ -374,7 +401,11 @@ def generateGame():
         if i in [4]:
             placeNewPiece(king(black, 0, i))
             placeNewPiece(king(white, 7, i))
-        
+    
+    # Load who's turn label
+    whosTurnLabel = tk.Label(window, text = "White's Turn", font = ("Segoe UI Variable Text", 13))
+    whosTurnLabel.grid(column = 3, row = 9, columnspan = 4)
+    
     return
 
 # Function for debug hacking pieces
@@ -384,12 +415,6 @@ def hack():
             for j in range(0, 8):
                 grid[i][j].is_green = True
     return
-
-# Debug hacking button
-hackButton = tk.Button(window, text = "hack selected piece", command = lambda: hack())
-hackButton.grid(column = 9, row = 0, rowspan = 2)
-if (debug_mode == False):
-    hackButton.destroy()
 
 # main function
 generateGame()
