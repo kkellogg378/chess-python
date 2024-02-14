@@ -249,7 +249,6 @@ def backupGreen():
     # Define global variables
     global greenBackup
     
-    # Backup which locations were already green
     greenBackup = [[False]*8 for _ in range(8)]
     
     for i in range(0, 8):
@@ -263,7 +262,6 @@ def backupGreen():
 
 # Function for restoring green squares
 def restoreGreen():
-    # Restore previous green spaces
     revert()
     for i in range(0, 8):
         for j in range(0, 8):
@@ -277,7 +275,7 @@ def restoreGreen():
     
     return
 
-# Function for determining if the king is currently in check
+# Function for determining if the king is currently in check (back up green spaces before using)
 def isKingInCheck(team):
     # Find matching king
     kingI, kingJ = -1, -1
@@ -294,11 +292,10 @@ def isKingInCheck(team):
                 grid[i][j].piece.generateValidMoves()
                 if (grid[kingI][kingJ].is_green == True):
                     returnVal = True
-                #revert()
     
     return returnVal
 
-# Function for testing whether a move will put the king in check
+# Function for testing whether a possible move will put the king in check
 def willKingBeInCheck(selI, selJ, destI, destJ):
     # Define global variables
     global checkingIfCheck, isSelected
