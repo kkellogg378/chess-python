@@ -7,6 +7,7 @@ debug_mode = True
 isSelected = False
 enPassant = False
 checkingIfCheck = False
+gameOver = False
 
 # Variables
 white = "White"
@@ -98,6 +99,10 @@ class pawn(chessPiece): # Jace helped here
             direction = 1
             eligibleRow = 1
         
+        # Handle pawns being able to "pacman" vertically
+        if (self.i == (eligibleRow + 6 * direction)):
+            return
+        
         try:
             # check if pawn is eligible for moving two spaces
             if (self.i == eligibleRow and all(grid[self.i + k * direction][self.j].piece == 0 for k in [1, 2]) and willKingBeInCheck(self.i, self.j, self.i + 2 * direction, self.j) == False):
@@ -116,6 +121,9 @@ class pawn(chessPiece): # Jace helped here
         
         # check for both right and left directions
         for k in [-1, 1]:
+            # Handle pawns being able to "pacman" horizontally
+            if ((self.j + k) < 0):
+                continue
             try:
                 # check whether the diagonal has an enemy piece
                 if (grid[self.i + direction][self.j + k].piece.team != self.team and willKingBeInCheck(self.i, self.j, self.i + direction, self.j + k) == False):
@@ -208,7 +216,6 @@ class king(chessPiece):
         validMove([-1, 0, 1, 0, 1, 1, -1, -1], [0, -1, 0, 1, 1, -1, 1, -1], self.i, self.j)
         return
     
-
 # Function that takes two sets of directions and generates valid moves in those directions
 def validMove(iMatrix, jMatrix, selI, selJ):
     for i in range(len(iMatrix)):
@@ -371,6 +378,12 @@ def movePiece(oldi, oldj, i, j):
     
     revert()
     updateWhosTurn()
+    if (isKingInCheck(whosTurn) == True):
+        print("checking for checkmate")
+        revert()
+        checkForCheckmate(whosTurn)
+        print("checkmate", gameOver)
+    revert()
     
     if (grid[i][j].piece.pieceType == "Pawn" and abs(oldi - i) == 2):
         enPassant = True
@@ -380,6 +393,75 @@ def movePiece(oldi, oldj, i, j):
         #enPassant_j = 8
     else:
         None
+    return
+
+# Function for making a new game
+def newGameFunction():
+    # Define global variables
+    global gameOver, whosTurn
+    
+    # Destroy all old buttons
+    newGameButton.destroy()
+    whosTurnLabel.destroy()
+    try:
+        hackButton.destroy()
+        for i in range(0, 8):
+            iLabels[i].destroy()
+            jLabels[i].destroy()
+        Labels.destroy()
+    except:
+        None
+    for i in range(0, 8):
+        for j in range(0, 8):
+            grid[i][j].destroy()
+    
+    # Generate new game
+    generateGame()
+    
+    # Update flags and variables
+    gameOver = False
+    whosTurn = black
+    updateWhosTurn()
+    
+    return
+
+# Function for when the game is over
+def gameOverFunction():
+    # Define global variables
+    global gameOver, newGameButton
+    
+    # Update whosTurn to show winner
+    updateWhosTurn()
+    whosTurnLabel.config(text = "Game over! " + whosTurn + " wins!")
+    
+    # Update flags
+    gameOver = True
+    
+    # Display New Game button
+    newGameButton = tk.Button(window, text = "New Game", command = lambda: newGameFunction())
+    newGameButton.grid(column = 3, row = 10, columnspan = 4)
+    return
+
+# Function for checking if the game is over
+def checkForCheckmate(team):
+    # Generate all valid moves
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if (grid[i][j].piece != 0 and grid[i][j].piece.team == team):
+                grid[i][j].piece.generateValidMoves()
+    
+    # Look for valid moves
+    validMoves = False
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if (grid[i][j].is_green == True):
+                validMoves = True
+    
+    if (validMoves == False):
+        gameOverFunction()
+    
+    revert()
+    
     return
 
 # Function for updating a label that shows who's turn it is
@@ -399,6 +481,9 @@ def updateWhosTurn():
 def left(i, j):
     # Define global variables
     global isSelected, selected_i, selected_j
+    
+    if (gameOver == True):
+        return
     
     # if selected space is green
     if (grid[i][j].is_green == True):
@@ -443,7 +528,7 @@ def right(i, j):
 # Function for generating a new game
 def generateGame():
     # Define global variables
-    global grid, whosTurnLabel
+    global grid, whosTurnLabel, hackButton
     
     # Define variables
     grid = [[0]*8 for _ in range(8)]
@@ -493,7 +578,7 @@ def generateGame():
     
     # Load who's turn label
     whosTurnLabel = tk.Label(window, text = "White's Turn", font = ("Segoe UI Variable Text", 13))
-    whosTurnLabel.grid(column = 3, row = 9, columnspan = 4)
+    whosTurnLabel.grid(column = 2, row = 9, columnspan = 6)
     
     return
 
