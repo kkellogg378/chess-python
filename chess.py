@@ -244,6 +244,60 @@ def validMove(iMatrix, jMatrix, selI, selJ):
                 None
             break
 
+# Function for backing up currently green squares
+def backupGreen():
+    # Define global variables
+    global greenBackup
+    
+    # Backup which locations were already green
+    greenBackup = [[False]*8 for _ in range(8)]
+    
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if (grid[i][j].is_green == True):
+                greenBackup[i][j] = True
+    
+    revert()
+    
+    return
+
+# Function for restoring green squares
+def restoreGreen():
+    # Restore previous green spaces
+    revert()
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if (greenBackup[i][j] == True):
+                if (grid[i][j].piece == 0):
+                    grid[i][j].config(image = empty_green)
+                    grid[i][j].is_green = True
+                else:
+                    grid[i][j].config(image = grid[i][j].piece.image_green)
+                    grid[i][j].is_green = True
+    
+    return
+
+# Function for determining if the king is currently in check
+def isKingInCheck(team):
+    # Find matching king
+    kingI, kingJ = -1, -1
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if (grid[i][j].piece != 0 and grid[i][j].piece.pieceType == "King" and grid[i][j].piece.team == team):
+                kingI, kingJ = i, j
+    
+    # Search enemy pieces for targets on the king
+    returnVal = False
+    for i in range(0, 8):
+        for j in range(0, 8):
+            if (grid[i][j].piece != 0 and grid[i][j].piece.team != team):
+                grid[i][j].piece.generateValidMoves()
+                if (grid[kingI][kingJ].is_green == True):
+                    returnVal = True
+                #revert()
+    
+    return returnVal
+
 # Function for testing whether a move will put the king in check
 def willKingBeInCheck(selI, selJ, destI, destJ):
     # Define global variables
@@ -261,46 +315,19 @@ def willKingBeInCheck(selI, selJ, destI, destJ):
     grid[destI][destJ].piece = grid[selI][selJ].piece
     grid[selI][selJ].piece = 0
     
-    # Backup which locations were already green
-    greenBackup = [[False]*8 for _ in range(8)]
+    # Back up currently green spaces
+    backupGreen()
     
-    # Find matching king
-    kingI, kingJ = -1, -1
-    for i in range(0, 8):
-        for j in range(0, 8):
-            if (grid[i][j].piece != 0 and grid[i][j].piece.pieceType == "King" and grid[i][j].piece.team == grid[destI][destJ].piece.team):
-                kingI, kingJ = i, j
-            
-            if (grid[i][j].is_green == True):
-                greenBackup[i][j] = True
-    
-    # Find all possible moves by enemy pieces
-    revert() # clear green
-    isSelected = True
-    returnVal = False
-    for i in range(0, 8):
-        for j in range(0, 8):
-            if (grid[i][j].piece != 0 and grid[i][j].piece.team != grid[destI][destJ].piece.team):
-                grid[i][j].piece.generateValidMoves()
-                if (grid[kingI][kingJ].is_green == True):
-                    returnVal = True
+    # Determine if king is in check
+    returnVal = isKingInCheck(grid[destI][destJ].piece.team)
     
     # Move piece back
     grid[selI][selJ].piece = grid[destI][destJ].piece
     grid[destI][destJ].piece = tempPiece
     tempPiece = 0
     
-    # Restore previous green spaces
-    revert()
-    for i in range(0, 8):
-        for j in range(0, 8):
-            if (greenBackup[i][j] == True):
-                if (grid[i][j].piece == 0):
-                    grid[i][j].config(image = empty_green)
-                    grid[i][j].is_green = True
-                else:
-                    grid[i][j].config(image = grid[i][j].piece.image_green)
-                    grid[i][j].is_green = True
+    # Restore green spaces
+    restoreGreen()
     
     # Update flags
     checkingIfCheck = False
