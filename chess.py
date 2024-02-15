@@ -543,6 +543,8 @@ def generateGame():
             grid[i][j].grid(column = j+1, row = i+1)
             grid[i][j].bind('<Button-1>', lambda k=k, i=i, j=j: left(i, j))
             grid[i][j].bind('<Button-3>', lambda k=k, i=i, j=j: right(i, j))
+            if ((i + j) % 2 == 1):
+                grid[i][j].config(bg = 'brown')
     
     # Generate debug tools
     if (debug_mode == True):
