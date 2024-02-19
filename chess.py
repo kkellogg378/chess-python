@@ -6,6 +6,7 @@ from functools import partial
 debug_mode = True
 isSelected = False
 enPassant = False
+usedEnPassant = False
 checkingIfCheck = False
 gameOver = False
 
@@ -15,6 +16,7 @@ black = "Black"
 selected_i = 0
 selected_j = 0
 whosTurn = white
+enPassant_j = 0
 enPassant_j = 0
 
 # Define tkinter window
@@ -91,6 +93,9 @@ class pawn(chessPiece): # Jace helped here
             self.image_green = blackPawn_green
     
     def generateValidMoves(self):
+        # Define global variables
+        global usedEnPassant
+        
         # define direction depending on team
         if (self.team == white):
             direction = -1
@@ -133,11 +138,15 @@ class pawn(chessPiece): # Jace helped here
                 None
         
         # en passant
-        #if (enPassant == True):
-        #    if (self.team == white and self.i == 3):
-        #        if (enP)
-        #    if (self.team == black and self.i == 4):
-                
+        for k in [-1, 1]:
+            try:
+                # if enPassant, piece next to you is enemy, on correct row, enpassant column, and wont put king in check
+                if (enPassant == True and grid[self.i][self.j + k].piece.team != self.team and self.i == (eligibleRow + 3 * direction) and (self.j + k) == enPassant_j and willKingBeInCheck(self.i, self.j, self.i + direction, self.j + k) == False):
+                    grid[self.i + direction][self.j + k].config(image = empty_green)
+                    grid[self.i + direction][self.j + k].is_green = True
+                    usedEnPassant = True
+            except:
+                None
         
         return
     
@@ -368,16 +377,29 @@ def placeNewPiece(piece):
 # Function for moving a piece
 def movePiece(oldi, oldj, i, j):
     # Define global variables
-    global whosTurn, enPassant
+    global whosTurn, enPassant, enPassant_i, enPassant_j, usedEnPassant
     
+    # Move piece
     grid[i][j].piece = grid[oldi][oldj].piece
     grid[i][j].piece.i = i
     grid[i][j].piece.j = j
     grid[oldi][oldj].piece = 0
     grid[oldi][oldj].config(image = empty)
     
+    # Kill pawn if en passant is used
+    if (usedEnPassant == True):
+        if (grid[i][j].piece.team == white):
+            grid[i + 1][j].piece = 0
+            grid[i + 1][j].config(image = empty)
+        if (grid[i][j].piece.team == black):
+            grid[i - 1][j].piece = 0
+            grid[i - 1][j].config(image = empty)
+    
+    # Update board and flags
     revert()
     updateWhosTurn()
+    
+    # Check for checkmate
     if (isKingInCheck(whosTurn) == True):
         print("checking for checkmate")
         revert()
@@ -385,14 +407,20 @@ def movePiece(oldi, oldj, i, j):
         print("checkmate", gameOver)
     revert()
     
+    # Detect en passant
     if (grid[i][j].piece.pieceType == "Pawn" and abs(oldi - i) == 2):
         enPassant = True
+        enPassant_i = i
         enPassant_j = j
+        print("En Passant = True, j = " + str(j))
+    # Reset en passant
     elif (enPassant == True):
-        enPassant == False
-        #enPassant_j = 8
+        enPassant = False
+        usedEnPassant = False
+        print("En Passant = False")
     else:
         None
+    
     return
 
 # Function for making a new game
