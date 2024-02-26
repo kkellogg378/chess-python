@@ -16,7 +16,6 @@ black = "Black"
 selected_i = 0
 selected_j = 0
 whosTurn = white
-enPassant_i = 0
 enPassant_j = 0
 
 # Define tkinter window
@@ -399,8 +398,6 @@ def movePiece(oldi, oldj, i, j):
     revert()
     updateWhosTurn()
     
-    # Check for stalemate
-    
     # Check for game over
     if (canTeamMove(whosTurn) == False):
         if (isKingInCheck(whosTurn) == True):
@@ -412,7 +409,6 @@ def movePiece(oldi, oldj, i, j):
     # Detect en passant
     if (grid[i][j].piece.pieceType == "Pawn" and abs(oldi - i) == 2):
         enPassant = True
-        enPassant_i = i
         enPassant_j = j
         print("En Passant = True, j = " + str(j))
     # Reset en passant
