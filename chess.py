@@ -16,7 +16,7 @@ black = "Black"
 selected_i = 0
 selected_j = 0
 whosTurn = white
-enPassant_j = 0
+enPassant_i = 0
 enPassant_j = 0
 
 # Define tkinter window
@@ -79,7 +79,7 @@ class chessPiece:
         self.j = j 
     
     def __str__(self):
-        return f"{team} {self.pieceType}"
+        return f"{self.team} {self.pieceType}"
     
 # Pawn class that has a unique generateValidMoves() function
 class pawn(chessPiece): # Jace helped here
@@ -399,12 +399,14 @@ def movePiece(oldi, oldj, i, j):
     revert()
     updateWhosTurn()
     
-    # Check for checkmate
-    if (isKingInCheck(whosTurn) == True):
-        print("checking for checkmate")
-        revert()
-        checkForCheckmate(whosTurn)
-        print("checkmate", gameOver)
+    # Check for stalemate
+    
+    # Check for game over
+    if (canTeamMove(whosTurn) == False):
+        if (isKingInCheck(whosTurn) == True):
+            gameOverFunction()
+        else:
+            stalemateFunction()
     revert()
     
     # Detect en passant
@@ -453,6 +455,22 @@ def newGameFunction():
     
     return
 
+# Function for if a stalemate is reached
+def stalemateFunction():
+    # Define global variables
+    global gameOver, newGameButton
+    
+    # Update whosTurnLabel to show result
+    whosTurnLabel.config(text = "Game over! " + whosTurn + " is in stalemate!")
+    
+    # Update flags
+    gameOver = True
+    
+    # Display New Game button
+    newGameButton = tk.Button(window, text = "New Game", command = lambda: newGameFunction())
+    newGameButton.grid(column = 3, row = 10, columnspan = 4)
+    return
+
 # Function for when the game is over
 def gameOverFunction():
     # Define global variables
@@ -470,8 +488,8 @@ def gameOverFunction():
     newGameButton.grid(column = 3, row = 10, columnspan = 4)
     return
 
-# Function for checking if the game is over
-def checkForCheckmate(team):
+# Function for checking if a move is possible
+def canTeamMove(team):
     # Generate all valid moves
     for i in range(0, 8):
         for j in range(0, 8):
@@ -485,12 +503,7 @@ def checkForCheckmate(team):
             if (grid[i][j].is_green == True):
                 validMoves = True
     
-    if (validMoves == False):
-        gameOverFunction()
-    
-    revert()
-    
-    return
+    return validMoves
 
 # Function for updating a label that shows who's turn it is
 def updateWhosTurn():
@@ -608,7 +621,7 @@ def generateGame():
     
     # Load who's turn label
     whosTurnLabel = tk.Label(window, text = "White's Turn", font = ("Segoe UI Variable Text", 13))
-    whosTurnLabel.grid(column = 2, row = 9, columnspan = 6)
+    whosTurnLabel.grid(column = 1, row = 9, columnspan = 8)
     
     return
 
