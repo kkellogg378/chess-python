@@ -3,12 +3,13 @@ from base64 import b64decode
 from functools import partial
 
 # Flags
-debug_mode = True
+debug_mode = False
 isSelected = False
 enPassant = False
 usedEnPassant = False
 checkingIfCheck = False
 gameOver = False
+isPromotingPawn = False
 
 # Variables
 white = "White"
@@ -225,14 +226,22 @@ class king(chessPiece):
         validMove([-1, 0, 1, 0, 1, 1, -1, -1], [0, -1, 0, 1, 1, -1, 1, -1], self.i, self.j)
         
         # Left Castling ( j = 2 )
-        if (self.hasMoved == False and grid[self.i][0].piece.pieceType == "Rook" and grid[self.i][0].piece.hasMoved == False and all(grid[self.i][self.j - k].piece == 0 for k in [1, 2])):
-            grid[self.i][2].config(image = empty_green)
-            grid[self.i][2].is_green = True
+        try:
+            if (self.hasMoved == False and grid[self.i][0].piece.pieceType == "Rook" and grid[self.i][0].piece.hasMoved == False and all(grid[self.i][self.j - k].piece == 0 for k in [1, 2])):
+                if (all(willKingBeInCheck(self.i, self.j, self.i, (self.j - k)) == False for k in [1, 2])):
+                    grid[self.i][2].config(image = empty_green)
+                    grid[self.i][2].is_green = True
+        except:
+            None
         
         # Right Castling ( j = 6 )
-        if (self.hasMoved == False and grid[self.i][7].piece.pieceType == "Rook" and grid[self.i][0].piece.hasMoved == False and all(grid[self.i][self.j + k].piece == 0 for k in [1, 2])):
-            grid[self.i][6].config(image = empty_green)
-            grid[self.i][6].is_green = True
+        try:
+            if (self.hasMoved == False and grid[self.i][7].piece.pieceType == "Rook" and grid[self.i][0].piece.hasMoved == False and all(grid[self.i][self.j + k].piece == 0 for k in [1, 2])):
+                if (all(willKingBeInCheck(self.i, self.j, self.i, (self.j + k)) == False for k in [1, 2])):
+                    grid[self.i][6].config(image = empty_green)
+                    grid[self.i][6].is_green = True
+        except:
+            None
         
         return
     
@@ -358,11 +367,84 @@ def willKingBeInCheck(selI, selJ, destI, destJ):
     isSelected = True
     
     return returnVal
+    
+# Main function for pawn promotion
+def pawnPromotion(i, j, team):
+    # Define global variables
+    global isPromotingPawn, popup
+    
+    #Only possible in debug mode
+    if (team == white and i == 7):
+        return
+    if (team == black and i == 0):
+        return
+    
+    # Generate pop up window
+    popup = tk.Toplevel()
+    popup.title("Pawn Promotion")
+    popup.geometry("232x58")
+    popup.protocol("WM_DELETE_WINDOW", lambda k=0, i=i, j=j, team=team: closewindow(i, j, team))
+    
+    # Add piece options
+    if (team == white):
+        newKnight = CustomButton(popup, image = whiteKnight, width = 32, height = 32, command = lambda i=i, j=j, team=team: finishPromoting(i, j, team, "Knight"))
+        newBishop = CustomButton(popup, image = whiteBishop, width = 32, height = 32, command = lambda i=i, j=j, team=team: finishPromoting(i, j, team, "Bishop"))
+        newRook = CustomButton(popup, image = whiteRook, width = 32, height = 32, command = lambda i=i, j=j, team=team: finishPromoting(i, j, team, "Rook"))
+        newQueen = CustomButton(popup, image = whiteQueen, width = 32, height = 32, command = lambda i=i, j=j, team=team: finishPromoting(i, j, team, "Queen"))
+    else:
+        newKnight = CustomButton(popup, image = blackKnight, width = 32, height = 32, command = lambda i=i, j=j, team=team: finishPromoting(i, j, team, "Knight"))
+        newBishop = CustomButton(popup, image = blackBishop, width = 32, height = 32, command = lambda i=i, j=j, team=team: finishPromoting(i, j, team, "Bishop"))
+        newRook = CustomButton(popup, image = blackRook, width = 32, height = 32, command = lambda i=i, j=j, team=team: finishPromoting(i, j, team, "Rook"))
+        newQueen = CustomButton(popup, image = blackQueen, width = 32, height = 32, command = lambda i=i, j=j, team=team: finishPromoting(i, j, team, "Queen"))
+    
+    newKnight.grid(column = 0, row = 0, padx = 10, pady = 10)
+    newBishop.grid(column = 1, row = 0, padx = 10, pady = 10)
+    newRook.grid(column = 2, row = 0, padx = 10, pady = 10)
+    newQueen.grid(column = 3, row = 0, padx = 10, pady = 10)
+    
+    # Update flags
+    isPromotingPawn = True
+    
+    return
+    
+# Function for selecting a pawn promotion
+def finishPromoting(i, j, team, pieceType):
+    # Define global variables
+    global isPromotingPawn
+    
+    # Create new piece
+    if (pieceType == "Knight"):
+        placeNewPiece(knight(team, i, j))
+    elif (pieceType == "Bishop"):
+        placeNewPiece(bishop(team, i, j))
+    elif (pieceType == "Rook"):
+        placeNewPiece(rook(team, i, j))
+    else:
+        placeNewPiece(queen(team, i, j))
+    
+    # Update flags
+    grid[i][j].piece.hasMoved = True
+    isPromotingPawn = False
+    
+    # Destroy popup
+    popup.destroy()
+    
+    return
+    
+# Function for handling player avoiding pawn promotion
+def closewindow(i, j, team):
+    # Destroy popup
+    popup.destroy()
+    
+    # Restart pawn promotion
+    pawnPromotion(i, j, team)
+    
+    return
 
 # Function for reverting greened spaces to regular
 def revert():
     # Define global variables
-    global isSelected, selected_i, selected_j
+    global isSelected#, selected_i, selected_j
     
     # Deselect previous selection
     isSelected = False
@@ -432,6 +514,10 @@ def movePiece(oldi, oldj, i, j):
             stalemateFunction()
     revert()
     
+    # Pawn promotion handling
+    if (i in [0, 7] and grid[i][j].piece.pieceType == "Pawn"):
+        pawnPromotion(i, j, grid[i][j].piece.team)
+    
     # Detect en passant
     if (grid[i][j].piece.pieceType == "Pawn" and abs(oldi - i) == 2):
         enPassant = True
@@ -457,6 +543,7 @@ def newGameFunction():
     whosTurnLabel.destroy()
     try:
         hackButton.destroy()
+        teamButton.destroy()
         for i in range(0, 8):
             iLabels[i].destroy()
             jLabels[i].destroy()
@@ -545,11 +632,16 @@ def left(i, j):
     # Define global variables
     global isSelected, selected_i, selected_j
     
-    if (gameOver == True):
+    if (gameOver == True or isPromotingPawn == True):
         return
     
     # if selected space is green
     if (grid[i][j].is_green == True):
+        # Forcing a piece to place on itself is how I delete a piece while debugging
+        if (debug_mode == True and selected_i == i and selected_j == j):
+            grid[i][j].piece = 0
+            revert()
+            return
         movePiece(selected_i, selected_j, i, j)
         return
     
@@ -576,7 +668,8 @@ def left(i, j):
     isSelected = True
     selected_i = i
     selected_j = j
-    print("selected", i, j)
+    if (debug_mode == True):
+        print("selected", i, j, "type", grid[i][j].piece.pieceType)
     
     # generate valid moves
     grid[i][j].piece.generateValidMoves()
@@ -591,7 +684,7 @@ def right(i, j):
 # Function for generating a new game
 def generateGame():
     # Define global variables
-    global grid, whosTurnLabel, hackButton
+    global grid, whosTurnLabel, hackButton, teamButton
     
     # Define variables
     grid = [[0]*8 for _ in range(8)]
@@ -620,26 +713,28 @@ def generateGame():
         Labels.grid(row = 0, column = 0)
         hackButton = tk.Button(window, text = "hack selected piece", command = lambda: hack())
         hackButton.grid(column = 9, row = 0, rowspan = 2)
+        teamButton = tk.Button(window, text = "change whos turn", command = lambda: updateWhosTurn())
+        teamButton.grid(column = 9, row = 2, rowspan = 2)
     
     # Place pieces
-    for i in range(0, 8):
-        placeNewPiece(pawn(black, 1, i))
-        placeNewPiece(pawn(white, 6, i))
-        if i in [0, 7]:
-            placeNewPiece(rook(black, 0, i))
-            placeNewPiece(rook(white, 7, i))
-        if i in [1, 6]:
-            placeNewPiece(knight(black, 0, i))
-            placeNewPiece(knight(white, 7, i))
-        if i in [2, 5]:
-            placeNewPiece(bishop(black, 0, i))
-            placeNewPiece(bishop(white, 7, i))
-        if i in [3]:
-            placeNewPiece(queen(black, 0, i))
-            placeNewPiece(queen(white, 7, i))
-        if i in [4]:
-            placeNewPiece(king(black, 0, i))
-            placeNewPiece(king(white, 7, i))
+    for j in range(0, 8):
+        placeNewPiece(pawn(black, 1, j))
+        placeNewPiece(pawn(white, 6, j))
+        if j in [0, 7]:
+            placeNewPiece(rook(black, 0, j))
+            placeNewPiece(rook(white, 7, j))
+        if j in [1, 6]:
+            placeNewPiece(knight(black, 0, j))
+            placeNewPiece(knight(white, 7, j))
+        if j in [2, 5]:
+            placeNewPiece(bishop(black, 0, j))
+            placeNewPiece(bishop(white, 7, j))
+        if j in [3]:
+            placeNewPiece(queen(black, 0, j))
+            placeNewPiece(queen(white, 7, j))
+        if j in [4]:
+            placeNewPiece(king(black, 0, j))
+            placeNewPiece(king(white, 7, j))
     
     # Load who's turn label
     whosTurnLabel = tk.Label(window, text = "White's Turn", font = ("Segoe UI Variable Text", 13))

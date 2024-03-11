@@ -1,4 +1,2 @@
 # chess-python
-Python implementation of chess
-
-TODO: Pawn promotion
+Python implementation of chess using tkinter as a GUI
