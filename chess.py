@@ -76,6 +76,7 @@ class chessPiece:
         self.team = team
         self.i = i 
         self.j = j 
+        self.hasMoved = False
     
     def __str__(self):
         return f"{self.team} {self.pieceType}"
@@ -222,6 +223,17 @@ class king(chessPiece):
     
     def generateValidMoves(self):
         validMove([-1, 0, 1, 0, 1, 1, -1, -1], [0, -1, 0, 1, 1, -1, 1, -1], self.i, self.j)
+        
+        # Left Castling ( j = 2 )
+        if (self.hasMoved == False and grid[self.i][0].piece.pieceType == "Rook" and grid[self.i][0].piece.hasMoved == False and all(grid[self.i][self.j - k].piece == 0 for k in [1, 2])):
+            grid[self.i][2].config(image = empty_green)
+            grid[self.i][2].is_green = True
+        
+        # Right Castling ( j = 6 )
+        if (self.hasMoved == False and grid[self.i][7].piece.pieceType == "Rook" and grid[self.i][0].piece.hasMoved == False and all(grid[self.i][self.j + k].piece == 0 for k in [1, 2])):
+            grid[self.i][6].config(image = empty_green)
+            grid[self.i][6].is_green = True
+        
         return
     
 # Function that takes two sets of directions and generates valid moves in those directions
@@ -358,12 +370,11 @@ def revert():
     # Clear all green spaces
     for i in range(0, 8):
         for j in range(0, 8):
-            if (grid[i][j].is_green == True):
-                if (grid[i][j].piece == 0):
-                    grid[i][j].config(image = empty)
-                else:
-                    grid[i][j].config(image = grid[i][j].piece.image)
-                grid[i][j].is_green = False
+            if (grid[i][j].piece == 0):
+                grid[i][j].config(image = empty)
+            else:
+                grid[i][j].config(image = grid[i][j].piece.image)
+            grid[i][j].is_green = False
     
     return
 
@@ -383,7 +394,6 @@ def movePiece(oldi, oldj, i, j):
     grid[i][j].piece.i = i
     grid[i][j].piece.j = j
     grid[oldi][oldj].piece = 0
-    grid[oldi][oldj].config(image = empty)
     
     # Kill pawn if en passant is used
     if (usedEnPassant == True):
@@ -394,9 +404,25 @@ def movePiece(oldi, oldj, i, j):
             grid[i - 1][j].piece = 0
             grid[i - 1][j].config(image = empty)
     
+    # Move rook if castling
+    if (grid[i][j].piece.pieceType == "King" and grid[i][j].piece.hasMoved == False and abs(oldj - j) > 1):
+        if (j == 2):
+            grid[i][3].piece = grid[i][0].piece
+            grid[i][3].piece.i = i
+            grid[i][3].piece.j = 3
+            grid[i][3].piece.hasMoved = True
+            grid[i][0].piece = 0
+        if (j == 6):
+            grid[i][5].piece = grid[i][7].piece
+            grid[i][5].piece.i = i
+            grid[i][5].piece.j = 5
+            grid[i][5].piece.hasMoved = True
+            grid[i][7].piece = 0
+    
     # Update board and flags
     revert()
     updateWhosTurn()
+    grid[i][j].piece.hasMoved = True
     
     # Check for game over
     if (canTeamMove(whosTurn) == False):
