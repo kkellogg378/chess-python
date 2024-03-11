@@ -227,7 +227,7 @@ class king(chessPiece):
         
         # Left Castling ( j = 2 )
         try:
-            if (self.hasMoved == False and grid[self.i][0].piece.pieceType == "Rook" and grid[self.i][0].piece.hasMoved == False and all(grid[self.i][self.j - k].piece == 0 for k in [1, 2])):
+            if (self.hasMoved == False and grid[self.i][0].piece.hasMoved == False and all(grid[self.i][self.j - k].piece == 0 for k in [1, 2])):
                 if (all(willKingBeInCheck(self.i, self.j, self.i, (self.j - k)) == False for k in [1, 2])):
                     grid[self.i][2].config(image = empty_green)
                     grid[self.i][2].is_green = True
@@ -236,7 +236,7 @@ class king(chessPiece):
         
         # Right Castling ( j = 6 )
         try:
-            if (self.hasMoved == False and grid[self.i][7].piece.pieceType == "Rook" and grid[self.i][0].piece.hasMoved == False and all(grid[self.i][self.j + k].piece == 0 for k in [1, 2])):
+            if (self.hasMoved == False and grid[self.i][7].piece.hasMoved == False and all(grid[self.i][self.j + k].piece == 0 for k in [1, 2])):
                 if (all(willKingBeInCheck(self.i, self.j, self.i, (self.j + k)) == False for k in [1, 2])):
                     grid[self.i][6].config(image = empty_green)
                     grid[self.i][6].is_green = True
